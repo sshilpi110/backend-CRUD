@@ -23,29 +23,29 @@ userRouter.post("/register", async (req, res) => {
 })
 
 userRouter.post("/login", async (req, res) => {
-    let { email, password } = req.body
+    const { email, password } = (req.body)
+
     try {
         const user = await UserModel.find({ email })
         if (user.length > 0) {
             bcrypt.compare(password, user[0].password, (err, result) => {
                 if (result) {
-                    var token = jwt.sign({ course: 'backend' }, 'secretkey');
-                    res.send({ "user": user, "token": token })
-
+                    let token = jwt.sign({ userID: user[0]._id }, 'secretkey')
+                    res.send({ "msg": "Logged In", "token": token })
                 } else {
-                    res.send({ "msg": "something went wrong", "err": err.message })
-                }
-            });
+                    res.send({ "msg": "wrong credentials" })
 
+                }
+            })
         } else {
             res.send({ "msg": "wrong credentials" })
+
         }
     } catch (err) {
-        res.send({ "msg": "something went wrong", "err": err.message })
-
+        res.send({ "msg": "something went wrong", "error": err.message })
     }
-
 })
+
 
 module.exports = {
     userRouter

@@ -1,0 +1,16 @@
+#container{
+    width: 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+#container>input{
+    margin: 10px;
+}
+button{
+    background-color: skyblue;
+    border:1px solid skyblue;
+    font-weight: 500;
+    align-items: center;
+}
