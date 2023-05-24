@@ -14,3 +14,15 @@ button{
     font-weight: 500;
     align-items: center;
 }
+#parent {
+    text-align: center;
+    margin-top: 50px;
+  
+  }
+
+#parent ul li {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid skyblue;
+    width: 150px;
+  }
