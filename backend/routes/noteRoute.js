@@ -3,8 +3,8 @@ const { NotesModel } = require("../model/NotesModel")
 const notesRouter = express.Router()
 
 
-notesRouter.get("/",async (req, res) => {
-    const notes=await NotesModel.find()
+notesRouter.get("/", async (req, res) => {
+    const notes = await NotesModel.find()
     res.send(notes)
 })
 
@@ -14,10 +14,47 @@ notesRouter.post("/create", async (req, res) => {
     res.send({ "msg": "notes created" })
 })
 
-notesRouter.delete("/delete/:id",async (req, res) => {
-    const noteID= req.params.id
-    await NotesModel.findByIdAndDelete({_id:noteID})
-    res.send(`msg: note with id${noteID} has been deleted`)
+notesRouter.patch("/update/:id", async (req, res) => {
+    const payload = req.body
+    const id = req.params.id
+    const note = await NotesModel.findOne({ "_id": id })
+    const userId_in_note = note.user
+    const userId_making_req = req.body.user
+    try {
+        if (userId_making_req !== userId_in_note) {
+            res.send({ "msg": "You are not authorized !" })
+        } else {
+            await NotesModel.findByIdAndUpdate({ "_id": id }, payload)
+            res.send("updated the note")
+        }
+    } catch (err) {
+        console.log(err)
+        res.send({ "msg": "something went wrong" })
+    }
+
+
+
+
+})
+
+notesRouter.delete("/delete/:id", async (req, res) => {
+    const id = req.params.id
+    const note = await NotesModel.findOne({ "_id": id })
+    const userId_in_note = note.user
+    const userId_making_req = req.body.user
+    try {
+        if (userId_making_req !== userId_in_note) {
+            res.send({ "msg": "You are not authorized !" })
+        } else {
+            await NotesModel.findByIdAndDelete({ "_id": id })
+            res.send("deleted the note")
+        }
+    } catch (err) {
+        console.log(err)
+        res.send({ "msg": "something went wrong" })
+    }
+
+
 })
 
 module.exports = {
